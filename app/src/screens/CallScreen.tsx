@@ -9,6 +9,7 @@ import {
   StatusBar,
 } from 'react-native';
 import * as Clipboard from 'expo-clipboard';
+import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useWebRTC } from '../hooks/useWebRTC';
 import { useChat } from '../hooks/useChat';
@@ -129,8 +130,9 @@ export function CallScreen({ navigation, route }: Props) {
         <View style={styles.topBar}>
           <View style={styles.roomInfo}>
             <Text style={styles.roomLabel}>Room</Text>
-            <TouchableOpacity onPress={handleCopyCode} activeOpacity={0.7}>
+            <TouchableOpacity style={styles.roomCodeBtn} onPress={handleCopyCode} activeOpacity={0.7}>
               <Text style={styles.roomCode}>{roomCode}</Text>
+              <Ionicons name="copy-outline" size={13} color="rgba(255,255,255,0.45)" />
             </TouchableOpacity>
           </View>
           <ConnectionStatusBar status={connectionStatus} peerConnected={peerConnected} />
@@ -213,15 +215,22 @@ const styles = StyleSheet.create({
     fontSize: 13,
     fontWeight: '500',
   },
-  roomCode: {
-    color: '#f3f4f6',
-    fontSize: 16,
-    fontWeight: '700',
-    letterSpacing: 2,
+  roomCodeBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
     paddingHorizontal: 12,
-    paddingVertical: 4,
+    paddingVertical: 5,
     borderRadius: 8,
+    borderWidth: StyleSheet.hairlineWidth,
+    borderColor: 'rgba(255, 255, 255, 0.12)',
+  },
+  roomCode: {
+    color: '#f3f4f6',
+    fontSize: 15,
+    fontWeight: '700',
+    letterSpacing: 2,
     overflow: 'hidden',
   },
   waitingOverlay: {

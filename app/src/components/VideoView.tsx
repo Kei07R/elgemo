@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { RTCView, MediaStream } from 'react-native-webrtc';
+import { Ionicons } from '@expo/vector-icons';
 
 interface Props {
   stream: MediaStream | null;
@@ -14,7 +15,11 @@ export function VideoView({ stream, isLocal = false, isCameraOff = false, style 
     return (
       <View style={[styles.placeholder, style]}>
         <View style={styles.avatarCircle}>
-          <Text style={styles.avatarText}>{isLocal ? 'You' : 'Peer'}</Text>
+          <Ionicons
+            name={isCameraOff ? 'videocam-off' : 'person'}
+            size={isLocal ? 22 : 40}
+            color="#6b7280"
+          />
         </View>
         {isCameraOff && (
           <Text style={styles.offLabel}>Camera off</Text>
@@ -41,7 +46,7 @@ const styles = StyleSheet.create({
   },
   placeholder: {
     flex: 1,
-    backgroundColor: '#1f2937',
+    backgroundColor: '#111827',
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -49,18 +54,16 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    backgroundColor: 'rgba(255, 255, 255, 0.06)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.08)',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  avatarText: {
-    color: '#9ca3af',
-    fontSize: 18,
-    fontWeight: '600',
-  },
   offLabel: {
-    color: '#6b7280',
-    fontSize: 13,
+    color: '#4b5563',
+    fontSize: 12,
     marginTop: 10,
+    fontWeight: '500',
   },
 });

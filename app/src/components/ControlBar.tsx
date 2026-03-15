@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 interface Props {
   isMuted: boolean;
@@ -14,31 +15,31 @@ interface Props {
 
 function ControlButton({
   label,
-  icon,
+  iconName,
   active = false,
   danger = false,
   badge,
   onPress,
 }: {
   label: string;
-  icon: string;
+  iconName: React.ComponentProps<typeof Ionicons>['name'];
   active?: boolean;
   danger?: boolean;
   badge?: number;
   onPress: () => void;
 }) {
+  const iconColor = danger ? '#fca5a5' : active ? '#fbbf24' : '#e5e7eb';
+
   return (
     <TouchableOpacity
-      style={[
-        styles.button,
-        active && styles.buttonActive,
-        danger && styles.buttonDanger,
-      ]}
+      style={[styles.button, active && styles.buttonActive, danger && styles.buttonDanger]}
       onPress={onPress}
       activeOpacity={0.7}
     >
-      <Text style={styles.icon}>{icon}</Text>
-      <Text style={[styles.label, danger && styles.labelDanger]}>{label}</Text>
+      <Ionicons name={iconName} size={24} color={iconColor} />
+      <Text style={[styles.label, active && styles.labelActive, danger && styles.labelDanger]}>
+        {label}
+      </Text>
       {badge != null && badge > 0 && (
         <View style={styles.badge}>
           <Text style={styles.badgeText}>{badge > 9 ? '9+' : badge}</Text>
@@ -63,30 +64,30 @@ export function ControlBar({
       <View style={styles.row}>
         <ControlButton
           label={isMuted ? 'Unmute' : 'Mute'}
-          icon={isMuted ? '\u{1F507}' : '\u{1F50A}'}
+          iconName={isMuted ? 'mic-off' : 'mic'}
           active={isMuted}
           onPress={onToggleMute}
         />
         <ControlButton
-          label={isCameraOff ? 'Camera On' : 'Camera Off'}
-          icon={isCameraOff ? '\u{1F6AB}' : '\u{1F4F7}'}
+          label={isCameraOff ? 'Show' : 'Hide'}
+          iconName={isCameraOff ? 'videocam-off' : 'videocam'}
           active={isCameraOff}
           onPress={onToggleCamera}
         />
         <ControlButton
           label="Flip"
-          icon={'\u{1F504}'}
+          iconName="camera-reverse-outline"
           onPress={onSwitchCamera}
         />
         <ControlButton
           label="Chat"
-          icon={'\u{1F4AC}'}
+          iconName="chatbubble-ellipses-outline"
           badge={unreadCount}
           onPress={onToggleChat}
         />
         <ControlButton
           label="End"
-          icon={'\u{1F4F5}'}
+          iconName="call"
           danger
           onPress={onEndCall}
         />
@@ -97,11 +98,14 @@ export function ControlBar({
 
 const styles = StyleSheet.create({
   container: {
-    paddingVertical: 12,
+    paddingTop: 16,
+    paddingBottom: 8,
     paddingHorizontal: 8,
-    backgroundColor: 'rgba(0, 0, 0, 0.6)',
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20,
+    backgroundColor: 'rgba(10, 10, 20, 0.85)',
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: 'rgba(255, 255, 255, 0.1)',
   },
   row: {
     flexDirection: 'row',
@@ -111,33 +115,37 @@ const styles = StyleSheet.create({
   button: {
     alignItems: 'center',
     justifyContent: 'center',
-    width: 60,
-    height: 60,
-    borderRadius: 30,
+    width: 62,
+    height: 62,
+    borderRadius: 31,
     backgroundColor: 'rgba(255, 255, 255, 0.1)',
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.08)',
   },
   buttonActive: {
-    backgroundColor: 'rgba(251, 191, 36, 0.25)',
+    backgroundColor: 'rgba(251, 191, 36, 0.18)',
+    borderColor: 'rgba(251, 191, 36, 0.35)',
   },
   buttonDanger: {
-    backgroundColor: 'rgba(239, 68, 68, 0.35)',
-  },
-  icon: {
-    fontSize: 22,
+    backgroundColor: 'rgba(239, 68, 68, 0.28)',
+    borderColor: 'rgba(239, 68, 68, 0.45)',
   },
   label: {
-    color: '#e5e7eb',
+    color: '#d1d5db',
     fontSize: 10,
-    marginTop: 2,
+    marginTop: 4,
     fontWeight: '500',
+  },
+  labelActive: {
+    color: '#fbbf24',
   },
   labelDanger: {
     color: '#fca5a5',
   },
   badge: {
     position: 'absolute',
-    top: 2,
-    right: 4,
+    top: 4,
+    right: 5,
     backgroundColor: '#ef4444',
     borderRadius: 9,
     minWidth: 18,
@@ -145,6 +153,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     paddingHorizontal: 4,
+    borderWidth: 1.5,
+    borderColor: 'rgba(0, 0, 0, 0.4)',
   },
   badgeText: {
     color: '#fff',

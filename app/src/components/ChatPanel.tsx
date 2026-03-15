@@ -11,6 +11,7 @@ import {
   Animated,
   Dimensions,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 import type { ChatMessage } from '../types';
 
 interface Props {
@@ -47,7 +48,7 @@ export function ChatPanel({ visible, messages, onSend, onClose }: Props) {
   useEffect(() => {
     Animated.timing(slideAnim, {
       toValue: visible ? 1 : 0,
-      duration: 250,
+      duration: 260,
       useNativeDriver: true,
     }).start();
   }, [visible, slideAnim]);
@@ -82,9 +83,16 @@ export function ChatPanel({ visible, messages, onSend, onClose }: Props) {
         keyboardVerticalOffset={100}
       >
         <View style={styles.header}>
-          <Text style={styles.headerTitle}>Chat</Text>
-          <TouchableOpacity onPress={onClose} hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}>
-            <Text style={styles.closeBtn}>Close</Text>
+          <View style={styles.headerLeft}>
+            <Ionicons name="chatbubbles" size={18} color="#60a5fa" />
+            <Text style={styles.headerTitle}>Chat</Text>
+          </View>
+          <TouchableOpacity
+            onPress={onClose}
+            hitSlop={{ top: 12, bottom: 12, left: 12, right: 12 }}
+            style={styles.closeBtn}
+          >
+            <Ionicons name="close" size={20} color="#9ca3af" />
           </TouchableOpacity>
         </View>
 
@@ -97,6 +105,7 @@ export function ChatPanel({ visible, messages, onSend, onClose }: Props) {
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
             <View style={styles.emptyContainer}>
+              <Ionicons name="chatbubble-outline" size={32} color="#374151" />
               <Text style={styles.emptyText}>No messages yet</Text>
             </View>
           }
@@ -113,8 +122,12 @@ export function ChatPanel({ visible, messages, onSend, onClose }: Props) {
             onSubmitEditing={handleSend}
             blurOnSubmit={false}
           />
-          <TouchableOpacity style={styles.sendBtn} onPress={handleSend}>
-            <Text style={styles.sendBtnText}>Send</Text>
+          <TouchableOpacity
+            style={[styles.sendBtn, !text.trim() && styles.sendBtnDisabled]}
+            onPress={handleSend}
+            disabled={!text.trim()}
+          >
+            <Ionicons name="arrow-up" size={20} color="#fff" />
           </TouchableOpacity>
         </View>
       </KeyboardAvoidingView>
@@ -129,9 +142,11 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     height: '60%',
-    backgroundColor: 'rgba(15, 15, 30, 0.95)',
+    backgroundColor: 'rgba(12, 12, 24, 0.97)',
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: 'rgba(255, 255, 255, 0.12)',
     overflow: 'hidden',
   },
   inner: {
@@ -144,7 +159,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 14,
     borderBottomWidth: StyleSheet.hairlineWidth,
-    borderBottomColor: 'rgba(255, 255, 255, 0.1)',
+    borderBottomColor: 'rgba(255, 255, 255, 0.08)',
+  },
+  headerLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
   headerTitle: {
     color: '#f3f4f6',
@@ -152,45 +172,49 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   closeBtn: {
-    color: '#60a5fa',
-    fontSize: 14,
-    fontWeight: '600',
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.08)',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   list: {
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 10,
     flexGrow: 1,
   },
   emptyContainer: {
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    paddingTop: 40,
+    paddingTop: 48,
+    gap: 10,
   },
   emptyText: {
-    color: '#6b7280',
+    color: '#4b5563',
     fontSize: 14,
   },
   bubble: {
     maxWidth: '78%',
     paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 16,
+    paddingVertical: 9,
+    borderRadius: 18,
     marginVertical: 3,
   },
   bubbleMine: {
     alignSelf: 'flex-end',
-    backgroundColor: '#3b82f6',
+    backgroundColor: '#2563eb',
     borderBottomRightRadius: 4,
   },
   bubblePeer: {
     alignSelf: 'flex-start',
-    backgroundColor: 'rgba(255, 255, 255, 0.12)',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderBottomLeftRadius: 4,
   },
   bubbleText: {
     fontSize: 15,
-    lineHeight: 20,
+    lineHeight: 21,
   },
   textMine: {
     color: '#fff',
@@ -203,11 +227,11 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   timestampMine: {
-    color: 'rgba(255, 255, 255, 0.6)',
+    color: 'rgba(255, 255, 255, 0.5)',
     textAlign: 'right',
   },
   timestampPeer: {
-    color: 'rgba(255, 255, 255, 0.4)',
+    color: 'rgba(255, 255, 255, 0.35)',
   },
   inputRow: {
     flexDirection: 'row',
@@ -215,27 +239,29 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     paddingVertical: 10,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: 'rgba(255, 255, 255, 0.1)',
+    borderTopColor: 'rgba(255, 255, 255, 0.08)',
+    gap: 8,
   },
   input: {
     flex: 1,
-    backgroundColor: 'rgba(255, 255, 255, 0.08)',
-    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.07)',
+    borderRadius: 22,
     paddingHorizontal: 16,
     paddingVertical: 10,
     color: '#f3f4f6',
     fontSize: 15,
-    marginRight: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.08)',
   },
   sendBtn: {
-    backgroundColor: '#3b82f6',
+    width: 40,
+    height: 40,
     borderRadius: 20,
-    paddingHorizontal: 18,
-    paddingVertical: 10,
+    backgroundColor: '#2563eb',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  sendBtnText: {
-    color: '#fff',
-    fontWeight: '600',
-    fontSize: 14,
+  sendBtnDisabled: {
+    backgroundColor: 'rgba(37, 99, 235, 0.35)',
   },
 });

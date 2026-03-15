@@ -4,7 +4,8 @@
     "slug": "elgemo",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/elgemo-logo.png",
+    "favicon": "./assets/favicon.ico",
     "userInterfaceStyle": "dark",
     "splash": {
       "backgroundColor": "#1a1a2e"
@@ -19,6 +20,7 @@
     },
     "android": {
       "adaptiveIcon": {
+        "foregroundImage": "./assets/elgemo-logo.png",
         "backgroundColor": "#1a1a2e"
       },
       "package": "com.elgemo.app",
